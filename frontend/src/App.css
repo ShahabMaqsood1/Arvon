@@ -1,36 +1,47 @@
 /* Smooth scrolling */
 html {
   scroll-behavior: smooth;
+  overflow-x: hidden;
+}
+
+body {
+  overflow-x: hidden;
 }
 
 /* Premium transitions */
 * {
-  transition-property: color, background-color, border-color, opacity, transform;
-  transition-duration: 200ms;
-  transition-timing-function: ease-in-out;
+  transition-property: color, background-color, border-color, opacity, transform, box-shadow;
+  transition-duration: 300ms;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* Remove transitions from transforms */
 .hover\:scale-110:hover,
+.hover\:scale-105:hover,
 [class*="group-hover:scale"] {
   transition-property: transform;
-  transition-duration: 500ms;
+  transition-duration: 700ms;
+  transition-timing-function: cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 /* Button hover effects */
 button {
   transition-property: background-color, color, transform, box-shadow;
-  transition-duration: 200ms;
+  transition-duration: 300ms;
+}
+
+button:hover {
+  transform: translateY(-2px);
 }
 
 button:active {
-  transform: scale(0.98);
+  transform: translateY(0);
 }
 
 /* Image hover effects */
 img {
-  transition-property: transform;
-  transition-duration: 500ms;
+  transition-property: transform, filter;
+  transition-duration: 700ms;
 }
 
 /* Focus states */
@@ -44,7 +55,7 @@ select:focus {
 @keyframes fadeIn {
   from {
     opacity: 0;
-    transform: translateY(10px);
+    transform: translateY(30px);
   }
   to {
     opacity: 1;
@@ -52,24 +63,128 @@ select:focus {
   }
 }
 
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
 .animate-fadeIn {
-  animation: fadeIn 0.5s ease-out;
+  animation: fadeIn 0.8s ease-out;
+}
+
+.animate-fadeInUp {
+  animation: fadeInUp 1s ease-out;
+}
+
+.animate-slideIn {
+  animation: slideIn 0.6s ease-out;
+}
+
+/* Glassmorphism */
+.glass {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.glass-dark {
+  background: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 /* Custom scrollbar */
 ::-webkit-scrollbar {
-  width: 10px;
+  width: 12px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #f1f1f1;
+  background: #f0f0f0;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #dc2626;
-  border-radius: 5px;
+  background: linear-gradient(180deg, var(--primary) 0%, var(--primary-dark) 100%);
+  border-radius: 6px;
+  border: 2px solid #f0f0f0;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #b91c1c;
+  background: linear-gradient(180deg, var(--primary-light) 0%, var(--primary) 100%);
+}
+
+/* Text gradient */
+.text-gradient {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Shine effect */
+.shine {
+  position: relative;
+  overflow: hidden;
+}
+
+.shine::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  transition: left 0.7s;
+}
+
+.shine:hover::before {
+  left: 100%;
+}
+
+/* Floating animation */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+/* Selection */
+::selection {
+  background: var(--primary);
+  color: white;
 }
