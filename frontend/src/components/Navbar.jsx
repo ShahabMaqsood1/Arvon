@@ -52,12 +52,6 @@ const Navbar = () => {
                 )}
               </Link>
             ))}
-            <Link
-              to="/admin"
-              className="ml-4 px-6 py-2.5 text-sm font-semibold text-white bg-gradient-to-r from-primary via-primary-light to-primary hover:shadow-premium transition-all duration-300 rounded-full"
-            >
-              Admin
-            </Link>
           </div>
 
           {/* Mobile Menu Button */}
@@ -88,13 +82,6 @@ const Navbar = () => {
                 {link.name}
               </Link>
             ))}
-            <Link
-              to="/admin"
-              onClick={() => setIsOpen(false)}
-              className="block px-4 py-3 text-sm font-semibold text-white bg-gradient-to-r from-primary to-primary-light rounded-xl text-center mt-4"
-            >
-              Admin Dashboard
-            </Link>
           </div>
         </div>
       )}
