@@ -11,6 +11,8 @@ class SMTPMailer {
     public $subject;
     public $body;
     public $isHTML = true;
+    public $replyTo = null;
+    public $replyToName = null;
     
     private $socket;
     
@@ -55,6 +57,16 @@ class SMTPMailer {
         
         $headers = "From: {$this->fromName} <{$this->from}>\r\n";
         $headers .= "To: <{$this->to}>\r\n";
+        
+        // Add Reply-To if set
+        if ($this->replyTo) {
+            if ($this->replyToName) {
+                $headers .= "Reply-To: {$this->replyToName} <{$this->replyTo}>\r\n";
+            } else {
+                $headers .= "Reply-To: {$this->replyTo}\r\n";
+            }
+        }
+        
         $headers .= "Subject: {$this->subject}\r\n";
         $headers .= "MIME-Version: 1.0\r\n";
         

@@ -64,7 +64,31 @@ CREATE TABLE IF NOT EXISTS admin_users (
 CREATE TABLE IF NOT EXISTS site_settings (
     setting_key VARCHAR(100) PRIMARY KEY,
     setting_value TEXT,
+    setting_label VARCHAR(200),
+    setting_type ENUM('text', 'textarea', 'email', 'url', 'number') DEFAULT 'text',
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+-- Pages Content Table
+CREATE TABLE IF NOT EXISTS pages (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    page_key VARCHAR(50) UNIQUE NOT NULL,
+    page_title VARCHAR(200) NOT NULL,
+    meta_description TEXT,
+    meta_keywords TEXT,
+    content_sections JSON,
+    is_active BOOLEAN DEFAULT 1,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+-- Navigation Menu Table
+CREATE TABLE IF NOT EXISTS navigation (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    label VARCHAR(100) NOT NULL,
+    url VARCHAR(255) NOT NULL,
+    display_order INT DEFAULT 0,
+    is_active BOOLEAN DEFAULT 1,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 -- Insert Sample Data
@@ -95,10 +119,37 @@ INSERT INTO admin_users (username, password, email) VALUES
 ('admin', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'admin@arvon.pk');
 
 -- Insert default site settings
-INSERT INTO site_settings (setting_key, setting_value) VALUES
-('site_title', 'ARVON - Premium Apparel Manufacturing'),
-('site_description', 'Premium apparel manufacturing for sportswear, casual wear, and custom solutions'),
-('contact_email', 'info@arvon.pk'),
-('contact_phone', '+92 (xxx) xxx-xxxx'),
-('contact_address', 'Pakistan'),
-('business_hours', '{"monday":"9:00 AM - 6:00 PM","tuesday":"9:00 AM - 6:00 PM","wednesday":"9:00 AM - 6:00 PM","thursday":"9:00 AM - 6:00 PM","friday":"9:00 AM - 6:00 PM","saturday":"9:00 AM - 2:00 PM","sunday":"Closed"}');
+INSERT INTO site_settings (setting_key, setting_value, setting_label, setting_type) VALUES
+('site_title', 'ARVON - Premium Apparel Manufacturing', 'Site Title', 'text'),
+('site_description', 'Premium apparel manufacturing for sportswear, casual wear, and custom solutions', 'Site Description', 'textarea'),
+('admin_email', 'info@arvon.pk', 'Admin Email', 'email'),
+('contact_email', 'info@arvon.pk', 'Contact Email', 'email'),
+('contact_phone', '+92 (xxx) xxx-xxxx', 'Contact Phone', 'text'),
+('contact_address', 'Pakistan', 'Contact Address', 'text'),
+('facebook_url', '#', 'Facebook URL', 'url'),
+('instagram_url', '#', 'Instagram URL', 'url'),
+('linkedin_url', '#', 'LinkedIn URL', 'url'),
+('business_hours', '{"monday":"9:00 AM - 6:00 PM","tuesday":"9:00 AM - 6:00 PM","wednesday":"9:00 AM - 6:00 PM","thursday":"9:00 AM - 6:00 PM","friday":"9:00 AM - 6:00 PM","saturday":"9:00 AM - 2:00 PM","sunday":"Closed"}', 'Business Hours', 'textarea');
+
+-- Insert default navigation
+INSERT INTO navigation (label, url, display_order, is_active) VALUES
+('Home', '/', 1, 1),
+('About', '/about.php', 2, 1),
+('Products', '/products.php', 3, 1),
+('Manufacturing', '/manufacturing.php', 4, 1),
+('Gallery', '/gallery.php', 5, 1),
+('Contact', '/contact.php', 6, 1);
+
+-- Insert homepage content
+INSERT INTO pages (page_key, page_title, meta_description, meta_keywords, content_sections) VALUES
+('home', 'Home - ARVON', 'Premium apparel manufacturing for sportswear, casual wear, and custom solutions', 'apparel, manufacturing, sportswear, pakistan', 
+'{"hero_badge":"FEATURED COLLECTION","hero_title":"Performance Track Jacket","hero_subtitle":"Lightweight, breathable track jacket with moisture-wicking technology","welcome_tag":"Welcome to ARVON","welcome_title":"Where Quality Meets Craftsmanship","welcome_description":"Premium apparel manufacturing solutions for brands, teams, and organizations. We bring your vision to life with precision, quality, and unmatched expertise.","categories_tag":"Our Collections","categories_title":"Product Categories","cta_title":"Ready to Elevate Your Brand?","cta_description":"Partner with ARVON for premium apparel manufacturing. Let''s bring your vision to life with exceptional quality and craftsmanship."}'),
+
+('about', 'About Us - ARVON', 'Learn about ARVON - Premium apparel manufacturing since 2020', 'about, company, manufacturing', 
+'{"hero_tag":"About ARVON","hero_title":"Premium Apparel Manufacturing Since 2020","hero_description":"ARVON is a leading apparel manufacturer specializing in high-quality sportswear, casual wear, and custom branded clothing.","values":[{"title":"Quality First","description":"We use only premium materials and rigorous quality control"},{"title":"Custom Solutions","description":"Tailored apparel solutions for brands and organizations"},{"title":"Sustainable","description":"Environmentally responsible manufacturing practices"}]}'),
+
+('manufacturing', 'Manufacturing - ARVON', 'State-of-the-art manufacturing facility with latest technology', 'manufacturing, capabilities, production', 
+'{"hero_tag":"Our Facility","hero_title":"Manufacturing & Capabilities","hero_description":"Our state-of-the-art facility is equipped with the latest technology to produce high-quality apparel at scale.","capabilities":[{"icon":"factory","title":"Large-Scale Production","description":"Capacity to handle orders from 100 to 100,000+ units"},{"icon":"palette","title":"Custom Design","description":"In-house design team for custom patterns and branding"},{"icon":"shield-check","title":"Quality Assurance","description":"Multi-stage quality control ensures perfect products"},{"icon":"clock","title":"Fast Turnaround","description":"Efficient processes for quick delivery without compromising quality"}]}'),
+
+('contact', 'Contact Us - ARVON', 'Get in touch with ARVON for inquiries and custom orders', 'contact, email, phone', 
+'{"hero_tag":"Get in Touch","hero_title":"Contact Us","hero_description":"Ready to start your project? Let''s discuss how we can help.","form_title":"Send us a Message","form_description":"Fill out the form below and we''ll get back to you within 24 hours."}');

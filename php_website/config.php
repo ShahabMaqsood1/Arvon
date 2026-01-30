@@ -24,10 +24,11 @@ define('ADMIN_EMAIL', 'info@arvon.pk');
 // ==========================================
 define('SMTP_HOST', 'smtp.spacemail.com');
 define('SMTP_PORT', 587);
-define('SMTP_USERNAME', 'info@arvon.pk');  // Your Spacemail username
-define('SMTP_PASSWORD', 'your_smtp_pass'); // Your Spacemail password
-define('SMTP_FROM_EMAIL', 'info@arvon.pk');
-define('SMTP_FROM_NAME', 'ARVON');
+define('SMTP_USERNAME', 'info@arvon.pk');      // Your Spacemail username
+define('SMTP_PASSWORD', 'your_smtp_pass');     // Your Spacemail password
+define('SMTP_FROM_EMAIL', 'no-reply@arvon.pk'); // Sender email (no-reply)
+define('SMTP_FROM_NAME', 'ARVON Website');
+define('SMTP_REPLY_TO', 'info@arvon.pk');      // Default reply-to
 
 // ==========================================
 // SECURITY CONFIGURATION
@@ -144,7 +145,7 @@ function jsonResponse($data, $statusCode = 200) {
 // ==========================================
 // EMAIL FUNCTION USING SPACEMAIL
 // ==========================================
-function sendEmail($to, $subject, $body, $isHTML = true) {
+function sendEmail($to, $subject, $body, $isHTML = true, $replyTo = null, $replyToName = null) {
     require_once __DIR__ . '/includes/smtp.php';
     
     try {
@@ -159,6 +160,8 @@ function sendEmail($to, $subject, $body, $isHTML = true) {
         $mail->subject = $subject;
         $mail->body = $body;
         $mail->isHTML = $isHTML;
+        $mail->replyTo = $replyTo;
+        $mail->replyToName = $replyToName;
         
         return $mail->send();
     } catch (Exception $e) {
